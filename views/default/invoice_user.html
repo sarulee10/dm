@@ -1,0 +1,96 @@
+{{extend 'layout.html'}}
+<!-- ==Page Title== -->
+<div class="pagetitle">
+  <h1>ออกใบแจ้งค่าเช่า</h1>
+</div>
+<!-- End Page Title -->
+
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body" >
+            <h2 class="card-title text-center" style="font-size: 20pt;">ใบแจ้งค่าเช่า</h2>
+              
+            <table class="table datatable">
+              <thead>
+                <tr>
+                  <th scope="col">ปี</th>
+                  <th scope="col">เดือน</th>
+                  <th scope="col">ชื่อห้องพัก</th>
+                  <th scope="col">ชื่อผู้เช่า</th>
+                  <th scope="col">รวมค่าใช้จ่าย(บาท/เดือน)</th>
+                  <th scope="col">สถานะการชำระเงิน</th>
+                  <th scope="col">พิมพ์</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{for row in result:}}
+                <tr>
+                  <td>
+                    {{=row.invoice_year}}
+                  </td>
+                  <td>
+                    {{=month_list[int(row.invoice_month)]}}
+                  </td>
+                  <td>
+                    {{=row.room_name}}
+                  </td>
+                  <td>
+                    {{=row.user_account_fullname}}
+                  </td>
+                  <td>
+                    {{=float(row.room_price or '')+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0')}}
+                  </td>
+                  <td>
+                    {{if row.payment_amount is None:}}
+                      <h4><span class="badge rounded-pill bg-danger" style="width: 150px;">Unpaid</span></h4>
+                    {{else:}}
+                      {{if float(row.room_price or '')+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0') == float(row.payment_amount): }}
+                        <h4><span class="badge rounded-pill bg-success" style="width: 150px;">Full Paid</span></h4>
+                      {{pass}}
+                      {{if float(row.room_price or '')+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0') > float(row.payment_amount): }}
+                        <h4><span class="badge rounded-pill bg-warning" style="width: 150px;">Waiting Full Paid</span></h4>
+                      {{pass}}
+                      {{if float(row.room_price or '')+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0') < float(row.payment_amount): }}
+                      <h4><span class="badge rounded-pill bg-info" style="width: 150px;">Over Full Paid</span></h4>
+                    {{pass}}
+                    {{pass}}
+                  <td>
+                    <a href="{{ = URL('invoice_receipt',vars=dict(invoice_id=row.id)) }}" class="btn btn-warning rounded-pill" style="width: 70px;">พิมพ์</a>
+                  </td>
+                </tr>
+                {{pass}}
+              </tbody>
+            </table>
+           
+  
+  
+  
+  
+  
+  
+  
+          </div>
+          <div class="card-footer">
+           
+          </div>
+          <p></p>
+        </div>
+
+
+    </div>
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+</section>

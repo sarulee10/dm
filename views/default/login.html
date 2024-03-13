@@ -1,0 +1,39 @@
+{{extend 'layout.html'}}
+
+<section class="section">
+
+  <div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+
+
+
+      <form action="{{=URL('login_process') }}" method="post">
+      <div class="card" style="padding-left: 50px;">
+        <div class="card-title"><h2>เข้าสู่ระบบ</h2></div>
+        <div class="card-body" >
+          <div class="row">
+            <div class="col-3">ชื่อผู้ใช้</div>
+            <div class="col-8 mb-2"><input name="username" type="text" class="form-control"></div>
+          </div>
+          <div class="row">
+            <div class="col-3">รหัสผ่าน</div>
+            <div class="col-8 mb-2"><input name="password" type="password" class="form-control"></div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary" style="width: 100px;" >เข้าสู่ระบบ</button>
+          <!-- <a type="button" class="btn btn-secondary" href="{{=URL('index') }}"; style="width: 100px;">ยกเลิก</a> -->
+        </div>
+        <p></p>
+      </div>
+      </form>
+
+    </div>
+  </div>
+
+
+
+
+
+</section>

@@ -1,0 +1,264 @@
+{{extend 'layout.html'}}
+<!-- ==Page Title== -->
+<div class="pagetitle">
+  <h1>ออกใบแจ้งค่าเช่า</h1>
+</div>
+<!-- End Page Title -->
+
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body" >
+            <h2 class="card-title text-center" style="font-size: 20pt;">ออกใบแจ้งค่าเช่า</h2>
+              
+            <div class="row justify-content-center mb-2" >
+              <form action="{{=URL('invoice') }}" method="post">
+                  <div class="row justify-content-center mb-2">
+                      <div class="col-3">
+                        <h5>เดือน</h5>
+                      </div>
+                      <div class="col-3 text-center">
+                        <input name="invoice_month" type="text" style=" font-size: 12pt;" value="{{=month_today}}" >
+                      </div>
+                  </div>
+                  <div class="row justify-content-center mb-2">
+                      <div class="col-3">
+                        <h5>ปี</h5>
+                      </div>
+                      <div class="col-3 text-center">
+                        <input name="invoice_year" type="text" style="font-size: 12pt;" value="{{=year_today}}" >
+                      </div>
+                  </div>
+                  <div class="row justify-content-center mb-2">
+                      <div class="col-3 text-center">
+                          <a href="{{ = URL('invoice') }}" class="btn btn-warning rounded-pill" style="width:70px">รีเซต</a>
+                          <button type="submit" class="btn btn-primary rounded-pill" style="width:70px">ค้นหา</button>
+                      </div>
+                  </div>
+              </form>
+            </div>
+
+
+            <div class="row" >
+              <div class="col-lg-12">
+                <table class="table ">
+                  <thead>
+                    <tr>
+    
+                      <th scope="col">เลขที่</th>
+                      <th scope="col">ปี</th>
+                      <th scope="col">เดือน</th>
+                      <th scope="col">ชื่อห้องพัก</th>
+                      <th scope="col">ชื่อผู้เช่า</th>
+                      <th scope="col">ราคาห้องพัก(บาท/เดือน)</th>
+                      <th scope="col">ค่าน้ำ(บาท/เดือน)</th>
+                      <th scope="col">ค่าไฟฟ้า(บาท/เดือน)</th>
+                      <th scope="col">ค่าใช้จ่ายอื่นๆ(บาท/เดือน)</th>
+                      <!-- <th scope="col">ค่าใช้จ่ายอื่นๆ(บาท/เดือน)</th> -->
+                      <!-- <th scope="col">รวมค่าใช้จ่าย(บาท/เดือน)</th> -->
+                      <th scope="col">บันทึก</th>
+                      <th scope="col">ลบ</th>
+                      <th scope="col">พิมพ์</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {{for row in result1:}}
+                    <form  action="{{=URL('invoice_edit_process') }}" method="post">
+                      <tr>
+                        <td>
+                          {{=row.invoice.id}}
+                          <input name="invoice_id" type="text" value="{{=row.invoice.id}}" hidden>
+                        </td>
+                        <td>
+                          {{=row.invoice.invoice_year}}
+                          <input name="invoice_year" type="text" value="{{=row.invoice.invoice_year}}" hidden>
+                        </td>
+                        <td>
+
+                          {{=month_list[int(row.invoice.invoice_month)]}}
+                          <!-- {{=row.invoice.invoice_month}} -->
+                          <input name="invoice_month" type="text" value="{{=row.invoice.invoice_month}}" hidden>
+                        </td>
+                        <td>
+                          {{=row.invoice.room_name}}
+                          <input name="room_name" type="text" value="{{=row.invoice.room_name}}" hidden>
+                        </td>
+                        <td>
+                          {{=row.invoice.user_account_fullname}}
+                          <input name="user_account_fullname" type="text" value="{{=row.invoice.user_account_fullname}}" hidden>
+                        </td>
+                        <td>
+                          <input name="room_price" type="text" value="{{=row.invoice.room_price}}">
+                        </td>
+                        <td>
+                          <input name="water_bill" type="text" value="{{=row.invoice.water_bill or ''}}">
+                        </td>
+                        <td>
+                          <input name="power_bill" type="text" value="{{=row.invoice.power_bill or ''}}">
+                        </td>
+                        <td>
+                          <input name="other_bill" type="text" value="{{=row.invoice.other_bill or ''}}">
+                        </td>
+                        <td>
+                          <button type="submit" class="btn btn-success rounded-pill" style="width:70px">บันทึก</button>
+                        </td>
+                        <td>
+                          <a href="{{ = URL('invoice_delete_process',vars=dict(invoice_id=row.invoice.id,invoice_year=invoice_year,invoice_month=invoice_month)) }}" class="btn btn-danger rounded-pill" style="width:70px">ลบ</a>
+                        </td>
+                        <td>
+                          <a href="{{ = URL('invoice_receipt',vars=dict(invoice_id=row.invoice.id)) }}" class="btn btn-warning rounded-pill" style="width:70px">พิมพ์</a>
+                        </td>
+                      </tr>
+                    </form>
+                  {{pass}}
+                  {{for row in result2:}}
+                    <form  action="{{=URL('invoice_edit_process') }}" method="post">
+                      <tr>
+                        <td>
+                          {{=row.invoice.id}}
+                          <input name="invoice_id" type="text" value="{{=row.invoice.id}}" hidden>
+                        </td>
+                        <td>
+                          {{=row.invoice.invoice_year}}
+                          <input name="invoice_year" type="text" value="{{=row.invoice.invoice_year}}" hidden>
+                        </td>
+                        <td>
+                          {{=month_list[int(row.invoice.invoice_month)]}}
+                          <!-- {{=row.invoice.invoice_month}} -->
+                          <input name="invoice_month" type="text" value="{{=row.invoice.invoice_month}}" hidden>
+                        </td>
+                        <td>
+                          {{=row.invoice.room_name}}
+                          <input name="room_name" type="text" value="{{=row.invoice.room_name}}" hidden>
+                        </td>
+                        <td>
+                          {{=row.invoice.user_account_fullname}}
+                          <input name="user_account_fullname" type="text" value="{{=row.invoice.user_account_fullname}}" hidden>
+                        </td>
+                        <td>
+                          <input name="room_price" type="text" value="{{=row.invoice.room_price}}">
+                        </td>
+                        <td>
+                          <input name="water_bill" type="text" value="{{=row.invoice.water_bill or ''}}">
+                        </td>
+                        <td>
+                          <input name="power_bill" type="text" value="{{=row.invoice.power_bill or ''}}">
+                        </td>
+                        <td>
+                          <input name="other_bill" type="text" value="{{=row.invoice.other_bill or ''}}">
+                        </td>
+                        <td>
+                          <button type="submit" class="btn btn-success rounded-pill" style="width:70px">บันทึก</button>
+                        </td>
+                        <td>
+                          <a href="{{ = URL('invoice_delete_process',vars=dict(invoice_id=row.invoice.id,invoice_year=invoice_year,invoice_month=invoice_month)) }}" class="btn btn-danger rounded-pill" style="width:70px">ลบ</a>
+                        </td>
+                        <td>
+                          <a href="{{ = URL('invoice_receipt',vars=dict(invoice_id=row.invoice.id)) }}" class="btn btn-warning rounded-pill" style="width:70px">พิมพ์</a>
+                        </td>
+                      </tr>
+                    </form>
+                  {{pass}}
+                  {{for row in result3:}}
+                    <form  action="{{=URL('invoice_new_process') }}" method="post">
+                      <tr>
+                        <td>
+                          {{=row.invoice.id or ''}}
+                          <input name="invoice_id" type="text" value="{{=row.invoice.id}}" hidden>
+                        </td>
+                        <td>
+                          <input name="invoice_date" type="text" value="{{=date_today}}" hidden>
+                          {{=invoice_year}}
+                          <input name="invoice_year" type="text" value="{{=invoice_year}}" hidden>
+                        </td>
+                        <td>
+                          {{=month_list[int(invoice_month)]}}
+                          <!-- {{=invoice_month}} -->
+                          <input name="invoice_month" type="text" value="{{=invoice_month}}" hidden>
+                        </td>
+                        <td>
+                          <!-- {{=row.room.id}}
+                          {{="/"}} -->
+                          <input name="room_id" type="text" value="{{=row.room.id}}" hidden>
+                          {{=row.room.room_name}}
+                          <input name="room_name" type="text" value="{{=row.room.room_name}}" hidden>
+                        </td>
+                        <td>
+                          <input name="user_account_id" type="text" value="{{=row.room.room_owner_id}}" hidden>
+                          {{for row_user_account in result_user_account:}}
+                            {{if row_user_account.id==row.room.room_owner_id:}}
+                              {{=row_user_account.fullname}}
+                              <input name="user_account_fullname" type="text" value="{{=row_user_account.fullname}}" hidden>
+                            {{pass}}
+                          {{pass}}
+                          
+                        </td>
+                        <td>
+                          <input name="room_price" type="text" value="{{=row.room.room_price}}">
+                        </td>
+                        <td>
+                          <input name="water_bill" type="text" value="">
+                        </td>
+                        <td>
+                          <input name="power_bill" type="text" value="">
+                        </td>
+                        <td>
+                          <input name="other_bill" type="text" value="{{=row.invoice.other_bill or ''}}">
+                        </td>
+                        <td>
+                          <button type="submit" class="btn btn-success rounded-pill" style="width:70px">บันทึก</button>
+                        </td>
+                        <td>
+    
+                        </td>
+                        <td>
+    
+                        </td>
+    
+     
+                      </tr>
+                    </form>
+                  {{pass}}
+    
+                    
+                   
+                   
+                  </tbody>
+                </table>
+
+
+              </div>
+            
+            
+            </div>
+
+
+
+           
+  
+  
+  
+  
+  
+  
+  
+
+        </div>
+
+
+    </div>
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+</section>

@@ -1,0 +1,7 @@
+cron/*
+errors/*
+languages/*
+modules/*
+private/*
+sessions/*
+uploads/*

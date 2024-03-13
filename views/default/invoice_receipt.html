@@ -1,0 +1,202 @@
+{{extend 'layout.html'}}
+<!-- ==Page Title== -->
+<div class="pagetitle">
+  <h1>ออกใบแจ้งค่าเช่า</h1>
+</div>
+<!-- End Page Title -->
+
+<!-- <script>
+  window.print()
+</script> -->
+
+
+
+
+<section class="section" >
+  <div class="row" >
+    <div class="col-lg-12">
+        <div class="card"  id="to-print" style="height: 550px;  width: 800px;">
+          <div class="card-body" >
+            <h2 class="card-title text-center" style="font-size: 20pt;">ใบแจ้งค่าเช่า/ใบเสร็จ</h2>
+            <div class="row" style="width:400; justify-content:end;" >
+              <div class="col-lg-10">
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>
+                        ชื่อห้อง
+                      </td>
+                      <td>
+                        {{=result.room_name}}
+                      </td>
+                      <td>
+                        เลขที่ใบแจ้งค่าเช่า
+                      </td>
+                      <td colspan="3">
+                        {{=result.id}}
+                      </td>
+      
+                    </tr>
+      
+                    <tr>
+                      <td>
+                        ชื่อผู้เช่า
+                      </td>
+                      <td>
+                        {{=result.user_account_fullname}}
+                      </td>
+                      <td>
+                        เดือน
+                      </td>
+                      <td>
+                        {{=month_list[int(result.invoice_month)]}}
+                      </td>
+                      <td>
+                        ปี
+                      </td>
+                      <td>
+                        {{=result.invoice_year}}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+
+            <div class="row" style="width:700; justify-content:center;" >
+              <div class="col-lg-10">
+                <table class="table table-bordered">
+                  <tbody>
+      
+                    <tr>
+                      <td>
+                        ลำดับที่
+                      </td>
+                      <td>
+                        รายการ
+                      </td>
+                      <td>
+                        ราคา(บาท)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        1
+                      </td>
+                      <td>
+                        ราคาห้องพัก(บาท/เดือน)
+                      </td>
+                      <td>
+                        {{=result.room_price}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        2
+                      </td>
+                      <td>
+                        ค่าน้ำ(บาท/เดือน)
+                      </td>
+                      <td>
+                        {{=result.water_bill or '0'}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        3
+                      </td>
+                      <td>
+                        ค่าไฟฟ้า(บาท/เดือน)
+                      </td>
+                      <td>
+                        {{=result.power_bill or '0'}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        4
+                      </td>
+                      <td>
+                        ค่าใช้จ่ายอื่นๆ(บาท/เดือน)
+                      </td>
+                      <td>
+                        {{=result.other_bill or '0'}}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2">
+                        รวมค่าใช้จ่าย
+                      </td>
+                      <td>
+                        {{=float(result.room_price or '0')+float(result.water_bill or '0')+float(result.power_bill or '0')+float(result.other_bill or '0')}}
+                      </td>
+                    </tr>
+      
+      
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            {{if result.payment_status !="Unpaid":}}
+            <div class="row" style="width:700; justify-content:center;" >
+              <div class="col-lg-10">
+                <table class="table table-borderless">
+                  <tbody>
+      
+                    <tr>
+                      <td colspan="4">
+                        ชำระเงินแล้ว
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        ยอดชำระ(บาท)
+                      </td>
+                      <td>
+                        {{=result.payment_amount or '0'}}
+                      </td>
+                      <td>
+                        ผู้ชำระเงิน
+                      </td>
+                      <td>
+                        {{=result.payment_name or '0'}}
+                      </td>
+                    </tr>
+                
+      
+      
+
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+            {{pass}}
+          </div>
+        </div>
+
+        <!-- html2pdf CDN-->
+        <!-- <script src="{{=URL('static','assets/js/html2pdf.bundle.js')}}"></script>
+        <button id="button1" class="btn btn-success rounded-pill">สร้างไฟล์ PDF</button>
+        <script>
+          let button = document.getElementById("button1");
+          let makepdf = document.getElementById("to-print");
+   
+          button.addEventListener("click", function () {
+              html2pdf().from(makepdf).save();
+          });
+        </script> -->
+   
+     
+
+    </div>
+  </div>
+  
+</br>
+
+
+
+
+</section>

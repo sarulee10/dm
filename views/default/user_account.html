@@ -1,0 +1,201 @@
+{{extend 'layout.html'}}
+<!-- ==Page Title== -->
+<div class="pagetitle">
+  <h1>ผู้เช่า</h1>
+</div>
+<!-- End Page Title -->
+
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+
+        <!-- <div class="card">
+          <div class="card-body" >
+            <div class="card-title">
+              <h2 class="text-center">ผู้เช่า</h2>
+            </div>
+  
+            <div class="row justify-content-end mb-2" >
+              <a href="{{ = URL('user_account_new') }}" class="btn btn-success rounded-pill" style="width: 100px;">เพิ่มผู้เช่า</a>
+            </div>
+  
+  
+  
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">ชื่อผู้ใช้</th>
+                    <th scope="col">หน้าที่</th>
+                    <th scope="col">ชื่อผู้เช่า</th>
+                    <th scope="col">เบอร์โทรศัพท์</th>
+                    <th scope="col">ที่อยู่</th>
+                    <th scope="col">แก้ไข</th>
+                    <th scope="col">ลบ</th>
+                  </tr>
+                </thead>
+                <tbody>
+    
+                  {{for row in result:}}
+                  <form>                    
+                    <tr>
+                      <td><input name="power_bill" type="text" style=" font-size: 12pt;" value="{{=row.user_account.username}}" >
+                        </td>
+                      <td>{{=row.role.name}}</td>
+                      <td>{{=row.user_account.fullname}}</td>
+                      <td>{{=row.user_account.tel or ''}}</td>
+                      <td>{{=row.user_account.address or ''}}</td>
+                      <td><a href="{{ = URL('user_account_edit',vars=dict(user_account_id=row.user_account.id)) }}" class="btn btn-primary rounded-pill">แก้ไข</a></td>
+                      <td><a href="{{ = URL('user_account_delete_process',vars=dict(user_account_id=row.user_account.id)) }}" class="btn btn-danger rounded-pill">ลบ</a></td>
+                    </tr>
+
+                  </form>
+
+                  {{pass}}
+    
+                  
+    
+    
+                </tbody>
+              </table>
+           
+  
+  
+  
+  
+  
+  
+  
+          </div>
+          <div class="card-footer">
+           
+          </div>
+        </div> -->
+
+
+
+
+        <div class="card">
+          <div class="card-body" >
+            <h2 class="card-title text-center" style="font-size: 20pt;">ผู้เช่า</h2>
+
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">ชื่อผู้ใช้</th>
+                  <th scope="col">รหัสผ่าน</th>
+                  <th scope="col">หน้าที่</th>
+                  <th scope="col">ชื่อผู้เช่า</th>
+                  <th scope="col">เบอร์โทรศัพท์</th>
+                  <th scope="col">ที่อยู่</th>
+                  <th scope="col">บันทึก</th>
+                  <th scope="col">ลบ</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{for row in result:}}
+                <form action="{{=URL('user_account_edit_process') }}" method="post">                    
+                  <tr>
+                    <td>
+                      {{=row.user_account.username}}
+                      <input name="user_account_id" type="text" value="{{=row.user_account.id}}" hidden>
+                      <input name="user_account_username" type="text"  value="{{=row.user_account.username}}" readonly hidden>
+                    </td>
+                    <td>
+                      <input name="user_account_password" type="password"  value="" >
+                    </td>
+                    <td>
+                      <select name="user_account_role_id" >
+                        {{for row_role in result_role:}}
+                          <option value="{{=row_role.id}}" {{= 'selected' if row_role.id==row.user_account.role_id else ''}}>{{=row_role.name}}</option>
+                        {{pass}}
+                      </select>
+                    </td>
+                    <td>
+                      <input name="user_account_fullname" type="text" value="{{=row.user_account.fullname}}" >
+                    </td>
+                    <td>
+                      <input name="user_account_tel" type="text" value="{{=row.user_account.tel or ''}}" >
+                    </td>
+                    <td>
+                      <input name="user_account_address" type="text" value="{{=row.user_account.address or ''}}" >
+                    </td>
+                    <td>
+                      <button type="submit" class="btn btn-success rounded-pill"  style="width:70px">บันทึก</button>
+                    </td>
+                    <td>
+                      <a href="{{ = URL('user_account_delete_process',vars=dict(user_account_id=row.user_account.id)) }}" class="btn btn-danger rounded-pill" style="width:70px">ลบ</a>
+                    </td>
+                  </tr>
+                </form>
+                {{pass}}
+              </tbody>
+            </table>
+           
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body" >
+
+            <h2 class="card-title text-center" style="font-size: 20pt;">เพิ่มผู้เช่า</h2>
+
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">ชื่อผู้ใช้</th>
+                  <th scope="col">รหัสผ่าน</th>
+                  <th scope="col">หน้าที่</th>
+                  <th scope="col">ชื่อผู้เช่า</th>
+                  <th scope="col">เบอร์โทรศัพท์</th>
+                  <th scope="col">ที่อยู่</th>
+                  <th scope="col">เพิ่ม</th>
+                </tr>
+              </thead>
+              <tbody>
+                <form action="{{=URL('user_account_new_process') }}" method="post">                    
+                  <tr>
+                    <td>
+                      <input name="user_account_username" type="text"  value="">
+                    </td>
+                    <td>
+                      <input name="user_account_password" type="password"  value="" >
+                    </td>
+                    <td>
+                      <select name="user_account_role_id" >
+                        {{for row_role in result_role:}}
+                          <option value="{{=row_role.id}}" >{{=row_role.name}}</option>
+                        {{pass}}
+                      </select>
+                    </td>
+                    <td>
+                      <input name="user_account_fullname" type="text" value="" >
+                    </td>
+                    <td>
+                      <input name="user_account_tel" type="text" value="" >
+                    </td>
+                    <td>
+                      <input name="user_account_address" type="text" value="" >
+                    </td>
+                    <td>
+                      <button type="submit" class="btn btn-primary rounded-pill" style="width:70px">เพิ่ม</button>
+                    </td>
+                  </tr>
+                </form>
+              </tbody>
+            </table>
+           
+          </div>
+        </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+</section>

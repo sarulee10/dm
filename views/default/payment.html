@@ -1,0 +1,173 @@
+{{extend 'layout.html'}}
+<!-- ==Page Title== -->
+<div class="pagetitle">
+  <h1>รับชำระเงิน</h1>
+</div>
+<!-- End Page Title -->
+
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body" >
+            <h2 class="card-title text-center" style="font-size: 20pt;">รับชำระเงิน</h2>
+              
+            <div class="row justify-content-center mb-2" >
+              <form action="{{=URL('payment') }}" method="post">
+                  <div class="row justify-content-center mb-2">
+                      <div class="col-3">
+                        <h5>เดือน</h5>
+                      </div>
+                      <div class="col-3 text-center">
+                        <input name="invoice_month" type="text" style=" font-size: 12pt;" value="{{=month_today}}" >
+                      </div>
+                  </div>
+                  <div class="row justify-content-center mb-2">
+                      <div class="col-3">
+                        <h5>ปี</h5>
+                      </div>
+                      <div class="col-3 text-center">
+                        <input name="invoice_year" type="text" style="font-size: 12pt;" value="{{=year_today}}" >
+                      </div>
+                  </div>
+                  <div class="row justify-content-center mb-2">
+                      <div class="col-3 text-center">
+                          <a href="{{ = URL('payment') }}" class="btn btn-warning rounded-pill"style="width:70px">รีเซต</a>
+                          <button type="submit" class="btn btn-primary rounded-pill" style="width:70px">ค้นหา</button>
+                      </div>
+                  </div>
+              </form>
+            </div>
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">เลขที่</th>
+                  <th scope="col">ปี</th>
+                  <th scope="col">เดือน</th>
+                  <th scope="col">ชื่อห้องพัก</th>
+                  <th scope="col">ชื่อผู้เช่า</th>
+                  <!-- <th scope="col">ราคาห้องพัก(บาท/เดือน)</th>
+                  <th scope="col">ค่าน้ำ(บาท/เดือน)</th>
+                  <th scope="col">ค่าไฟฟ้า(บาท/เดือน)</th>
+                  <th scope="col">ค่าใช้จ่ายอื่นๆ(บาท/เดือน)</th> -->
+                  <th scope="col">รวมค่าเช่า(บาท/เดือน)</th>
+                  <th scope="col">ยอดจ่าย</th>
+                  <th scope="col">ชื่อผู้จ่าย</th>
+                  <th scope="col">สถานะการชำระเงิน</th>
+                  <th scope="col">บันทึก</th>
+                  <th scope="col">พิมพ์</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{for row in result:}}
+                <form action="{{=URL('payment_edit_process') }}" method="post">
+                  <tr>
+                    <td>
+                      {{=row.id}}
+                      <input name="invoice_id" type="text" value="{{=row.id}}" hidden>
+                    </td>
+                    <td>
+                      
+                      {{=row.invoice_year}}
+                      <input name="invoice_year" type="text" value="{{=row.invoice_year}}" hidden>
+                    </td>
+                    <td>
+                      {{=month_list[int(row.invoice_month)]}}
+                      <!-- {{=row.invoice_month}} -->
+                      <input name="invoice_month" type="text" value="{{=row.invoice_month}}" hidden>
+                    </td>
+                    <td>
+                      {{=row.room_name}}
+                      <input name="room_id" type="text" value="{{=row.room_id}}" hidden>
+                      <input name="room_name" type="text" value="{{=row.room_name}}"hidden >
+                    </td>
+                    <td>
+                      {{=row.user_account_fullname}}
+                      <input name="user_account_id" type="text" value="{{=row.user_account_id}}" hidden>
+                      <input name="user_account_fullname" type="text" value="{{=row.user_account_fullname}}" hidden>
+                    </td>
+                    <!-- <td>
+                      <input name="room_price" type="text" value="{{=row.room_price}}" >
+                    </td>
+                    <td>
+                      <input name="water_bill" type="text" value="{{=row.water_bill or ''}}" >
+                    </td>
+                    <td>
+                      <input name="power_bill" type="text" value="{{=row.power_bill or ''}}" >
+                    </td>
+                    <td>
+                      <input name="other_bill" type="text" value="{{=row.other_bill or ''}}" >
+                    </td> -->
+
+                    <td>
+                      {{=float(row.room_price or '')+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0')}}
+                      <input name="sum_bill" type="text" value="{{=row.room_price+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0')}}" hidden>
+                    </td>
+                    <td>
+                      <input name="payment_amount" type="text" value="{{=row.payment_amount or ''}}">
+                    </td>
+                    <td>
+                      <input name="payment_name" type="text" value="{{=row.payment_name or ''}}">
+                    </td>
+                    <td>
+                      {{if row.payment_amount is None:}}
+                        <h4><span class="badge rounded-pill bg-danger" style="width: 150px;">Unpaid</span></h4>
+                      {{else:}}
+                        {{if float(row.room_price or '')+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0') == float(row.payment_amount): }}
+                          <h4><span class="badge rounded-pill bg-success" style="width: 150px;">Full Paid</span></h4>
+                        {{pass}}
+                        {{if float(row.room_price or '')+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0') > float(row.payment_amount): }}
+                          <h4><span class="badge rounded-pill bg-warning" style="width: 150px;">Waiting Full Paid</span></h4>
+                        {{pass}}
+                        {{if float(row.room_price or '')+float(row.water_bill or '0')+float(row.power_bill or '0')+float(row.other_bill or '0') < float(row.payment_amount): }}
+                          <h4><span class="badge rounded-pill bg-info" style="width: 150px;">Over Full Paid</span></h4>
+                        {{pass}}
+                      {{pass}}
+
+<!-- 
+                      <select name="payment_status" >
+                        <option value="Unpaid" {{= 'selected' if row.payment_status=="Unpaid" else ''}}>Unpaid</option>
+                        <option value="Paid" {{= 'selected' if row.payment_status=="Paid" else ''}}>Paid</option>
+                      </select> -->
+
+                    </td>
+
+
+                    <td>
+                      <button type="submit" class="btn btn-success rounded-pill" style="width:70px">บันทึก</button>
+                    </td>
+                    <td><a href="{{ = URL('invoice_receipt',vars=dict(invoice_id=row.id)) }}" class="btn btn-warning rounded-pill" style="width:70px">พิมพ์</a></td>
+                  </tr>
+                </form>
+                {{pass}}
+              </tbody>
+            </table>
+           
+  
+  
+  
+  
+  
+  
+  
+          </div>
+
+        </div>
+
+
+    </div>
+
+
+
+
+    </div>
+  </div>
+
+
+
+
+
+</section>

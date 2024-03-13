@@ -1,0 +1,107 @@
+{{extend 'layout.html'}}
+<!-- ==Page Title== -->
+<div class="pagetitle">
+  <h1>ห้องพัก</h1>
+</div>
+<!-- End Page Title -->
+
+
+<section class="section">
+  <div class="row">
+    <div class="col-lg-12">
+
+      <div class="card">
+        <div class="card-body" >
+          <h2 class="card-title text-center" style="font-size: 20pt;">ห้องพัก</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ชื่อห้องพัก</th>
+                <th scope="col">ราคาห้องพัก(บาท/เดือน)</th>
+                <th scope="col">สถานะห้องพัก</th>
+                <th scope="col">ชื่อผู้เช่า</th>
+                <th scope="col">บันทึก</th>
+                <th scope="col">ลบ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{for row in result:}}
+              <form action="{{=URL('room_edit_process') }}" method="post"> 
+                <tr>
+                  <td>
+                    {{=row.room.room_name}}
+                    <input name="room_id" type="text" value="{{=row.room.id}}" hidden>
+                    <input name="room_name" type="text"  value="{{=row.room.room_name}}" readonly hidden>
+                  </td>
+                  <td>
+                    <input name="room_price" type="text"  value="{{=row.room.room_price or ''}}">
+                  </td>
+                  <td> 
+                    <h5>
+                      <span class="badge rounded-pill bg-success" {{='' if row.room.room_owner_id is None else 'hidden'}} style="width:70px">ว่าง</span>
+                    </h5>
+                    <h5>
+                      <span class="badge rounded-pill bg-danger" {{='hidden' if row.room.room_owner_id is None else ''}} style="width:70px">ไม่ว่าง</span>
+                    </h5>
+                  </td>
+                  <td>
+                    <select name="room_owner_id" style="width: 280px; font-size: 12pt;">
+                      <option value="" {{= 'selected' if row.room.room_owner_id is None else ''}}></option>
+                      {{for row_user_account in result_user_account:}}
+                      <option value="{{=row_user_account.id}}"{{= 'selected' if row_user_account.id==row.room.room_owner_id else ''}}>{{=row_user_account.fullname}}</option>
+                      {{pass}}
+                    </select>
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-success rounded-pill" style="width:70px">บันทึก</button>
+                  </td>
+                  <td><a href="{{ = URL('room_delete_process',vars=dict(room_id=row.room.id)) }}" class="btn btn-danger rounded-pill" style="width:70px">ลบ</a></td>
+                </tr>
+              </form>
+              {{pass}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" >
+          <h2 class="card-title text-center" style="font-size: 20pt;">เพิ่มห้องพัก</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">ชื่อห้องพัก</th>
+                <th scope="col">ราคาห้องพัก(บาท/เดือน)</th>
+                <th scope="col">ชื่อผู้เช่า</th>
+                <th scope="col">เพิ่ม</th>
+              </tr>
+            </thead>
+            <tbody>
+              <form action="{{=URL('room_new_process') }}" method="post"> 
+                <tr>
+                  <td>
+                    <input name="room_name" type="text"  value="">
+                  </td>
+                  <td>
+                    <input name="room_price" type="text"  value="">
+                  </td>
+                  <td>
+                    <select name="room_owner_id" style="width: 280px; font-size: 12pt;">
+                      <option value=""></option>
+                      {{for row_user_account in result_user_account:}}
+                      <option value="{{=row_user_account.id}}">{{=row_user_account.fullname}}</option>
+                      {{pass}}
+                    </select>
+                  </td>
+                  <td>
+                    <button type="submit" class="btn btn-primary rounded-pill" style="width:70px">เพิ่ม</button>
+                  </td>
+                </tr>
+              </form>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

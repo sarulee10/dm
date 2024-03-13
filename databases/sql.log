@@ -1,0 +1,109 @@
+timestamp: 2024-03-09T14:07:36.149053
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "first_name" CHAR(128),
+    "last_name" CHAR(128),
+    "email" CHAR(512),
+    "password" CHAR(512),
+    "registration_key" CHAR(512),
+    "reset_password_key" CHAR(512),
+    "registration_id" CHAR(512)
+);
+success!
+timestamp: 2024-03-09T14:07:36.156058
+CREATE TABLE "auth_group"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "role" CHAR(512),
+    "description" TEXT
+);
+success!
+timestamp: 2024-03-09T14:07:36.161057
+CREATE TABLE "auth_membership"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+);
+success!
+timestamp: 2024-03-09T14:07:36.168056
+CREATE TABLE "auth_permission"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "group_id" INTEGER REFERENCES "auth_group" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "name" CHAR(512),
+    "table_name" CHAR(512),
+    "record_id" INTEGER
+);
+success!
+timestamp: 2024-03-09T14:07:36.175062
+CREATE TABLE "auth_event"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "time_stamp" TIMESTAMP,
+    "client_ip" CHAR(512),
+    "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "origin" CHAR(512),
+    "description" TEXT
+);
+success!
+timestamp: 2024-03-09T14:07:36.186067
+CREATE TABLE "auth_cas"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "created_on" TIMESTAMP,
+    "service" CHAR(512),
+    "ticket" CHAR(512),
+    "renew" CHAR(1)
+);
+success!
+timestamp: 2024-03-09T14:07:36.198064
+CREATE TABLE "role"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" CHAR(512) UNIQUE,
+    "status" CHAR(512),
+    "create_at" TIMESTAMP,
+    "update_at" TIMESTAMP
+);
+success!
+timestamp: 2024-03-09T14:07:36.207067
+CREATE TABLE "user_account"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "role_id" INTEGER REFERENCES "role" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "fullname" CHAR(512),
+    "tel" CHAR(512),
+    "address" CHAR(512),
+    "status" CHAR(512),
+    "create_at" TIMESTAMP,
+    "update_at" TIMESTAMP
+);
+success!
+timestamp: 2024-03-09T14:07:36.216072
+CREATE TABLE "room"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "room_name" CHAR(512),
+    "room_owner_id" INTEGER REFERENCES "user_account" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "room_price" DOUBLE,
+    "create_at" TIMESTAMP,
+    "update_at" TIMESTAMP
+);
+success!
+timestamp: 2024-03-09T14:07:36.224070
+CREATE TABLE "invoice"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "invoice_date" DATE,
+    "invoice_year" CHAR(512),
+    "invoice_month" CHAR(512),
+    "room_id" INTEGER,
+    "room_name" CHAR(512),
+    "user_account_id" INTEGER,
+    "user_account_fullname" CHAR(512),
+    "room_price" DOUBLE,
+    "water_bill" DOUBLE,
+    "power_bill" DOUBLE,
+    "other_bill" DOUBLE,
+    "payment_status" CHAR(512),
+    "payment_name" CHAR(512),
+    "payment_amount" DOUBLE,
+    "create_at" TIMESTAMP,
+    "update_at" TIMESTAMP
+);
+success!
